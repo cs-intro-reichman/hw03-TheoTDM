@@ -23,7 +23,7 @@ public class LoanCalc {
 		System.out.printf("%.2f", bruteForceSolver(loan, rate, n, epsilon));
 		System.out.println();
 		System.out.println("number of iterations: " + iterationCounter);
-
+		iterationCounter = 0;
 		// Computes the periodical payment using bisection search
 		System.out.print("Periodical payment, using bi-section search: ");
 		System.out.printf("%.2f", bisectionSolver(loan, rate, n, epsilon));
@@ -40,7 +40,14 @@ public class LoanCalc {
 	// Side effect: modifies the class variable iterationCounter.
     public static double bruteForceSolver(double loan, double rate, int n, double epsilon) {  
     	// Replace the following statement with your code
-    	return 0;
+    	double payment = loan/n;
+    	int count = 0;
+		while (endBalance(loan, rate, n, payment) > epsilon) {
+			payment += 1;
+			count ++;
+		}
+		iterationCounter = count;
+    	return payment;
     }
     
     /**
@@ -51,8 +58,21 @@ public class LoanCalc {
 	*/
 	// Side effect: modifies the class variable iterationCounter.
     public static double bisectionSolver(double loan, double rate, int n, double epsilon) {  
-    	// Replace the following statement with your code
-    	return 0;
+    	double L = loan/n, H = loan/n; // Sets L and H to initial values such that 𝑓(𝐿) > 0, 𝑓(𝐻) < 0,
+		int count = 0;
+		double g = (L + H)/2;
+		while ((H - L) > epsilon){
+			if ((endBalance(loan, rate, n, g) * endBalance(loan, rate, n, L)) > 0){
+				L += 1;
+			}
+			else {
+				H -= 1;
+			}
+			g = (L + H)/2; // Computes the mid-value (𝑔) for the next iteration
+			count ++;
+		}
+		iterationCounter = count;
+		return g;
     }
 	
 	/**
@@ -60,7 +80,9 @@ public class LoanCalc {
 	* interest rate (as a percentage), the number of periods (n), and the periodical payment.
 	*/
 	private static double endBalance(double loan, double rate, int n, double payment) {
-		// Replace the following statement with your code
-    	return 0;
+		for (int i=0; i < n; i++){
+			loan = (loan - payment) * (1 + (rate / 100));
+		}
+    	return loan;
 	}
 }
