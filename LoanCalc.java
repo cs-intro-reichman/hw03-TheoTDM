@@ -43,7 +43,7 @@ public class LoanCalc {
     	double payment = loan/n;
     	int count = 0;
 		while (endBalance(loan, rate, n, payment) > epsilon) {
-			payment += 0.01;
+			payment += epsilon;
 			count ++;
 		}
 		iterationCounter = count;
